@@ -278,7 +278,7 @@ cat >> "$HOME/agsbx/xr.json" <<EOF
     },
 EOF
 fi
-if [ -n "$vwpt" ]; then
+if [ -n "$vwpt" ] || [ "$argo" = "vwpt" ]; then
 if [ -z "$vwpt" ] && [ ! -e "$HOME/agsbx/vwpt" ]; then
 vwpt=$(shuf -i 10000-65535 -n 1)
 echo "$vwpt" > "$HOME/agsbx/vwpt"
@@ -569,7 +569,7 @@ fi
 }
 
 xrsbvm(){
-if [ -n "$vmpt" ]; then
+if [ -n "$vmpt" ] || [ "$argo" = "vmpt" ]; then
 if [ -z "$vmpt" ] && [ ! -e "$HOME/agsbx/vmpt" ]; then
 vmpt=$(shuf -i 10000-65535 -n 1)
 echo "$vmpt" > "$HOME/agsbx/vmpt"
@@ -1165,7 +1165,9 @@ for P in /proc/[0-9]*; do if [ -L "$P/exe" ]; then TARGET=$(readlink -f "$P/exe"
 kill -15 $(pgrep -f 'agsbx/s' 2>/dev/null) $(pgrep -f 'agsbx/c' 2>/dev/null) $(pgrep -f 'agsbx/x' 2>/dev/null) >/dev/null 2>&1
 v4orv6(){
 if [ -z "$( (command -v curl >/dev/null 2>&1 && curl -s4m5 -k "$v46url" 2>/dev/null) || (command -v wget >/dev/null 2>&1 && timeout 3 wget -4 -qO- --tries=2 "$v46url" 2>/dev/null) )" ]; then
-echo -e "nameserver 2a00:1098:2b::1\nnameserver 2a00:1098:2c::1" > /etc/resolv.conf
+if ! printf "nameserver 2a00:1098:2b::1\nnameserver 2a00:1098:2c::1\n" > /etc/resolv.conf 2>/dev/null; then
+echo "Warning: unable to write /etc/resolv.conf (read-only filesystem), continuing with existing DNS config" >&2
+fi
 fi
 if [ -n "$( (command -v curl >/dev/null 2>&1 && curl -s6m5 -k "$v46url" 2>/dev/null) || (command -v wget >/dev/null 2>&1 && timeout 3 wget -6 -qO- --tries=2 "$v46url" 2>/dev/null) )" ]; then
 sendip="2606:4700:d0::a29f:c001"
