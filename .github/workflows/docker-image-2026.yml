@@ -40,4 +40,4 @@ jobs:
           context: ./container/nodejs
           file: ./container/nodejs/Dockerfile
           push: true
-          tags: ghcr.io/${{ steps.repo_owner.outputs.value }}/myargosbx:2026
+          tags: ghcr.io/${{ steps.repo_owner.outputs.value }}/myargosbx:latest
